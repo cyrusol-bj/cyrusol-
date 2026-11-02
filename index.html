@@ -2,27 +2,75 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYRUSOL - Énergie Solaire Azové, Bénin</title>
-<meta name="description" content="CYRUSOL, énergie solaire à Azové, Kouffo, Bénin. Panneaux, batteries, installation complète.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CYRUSOL - Plateforme Vidéo</title>
 <style>
-body{margin:0;font-family:Arial;background:#fefee8}
-.header{background:#0a5c36;color:white;text-align:center;padding:40px 20px}
-.header h1{margin:0;font-size:32px}
-.btn{display:inline-block;margin-top:20px;background:#ffcc00;color:#0a5c36;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:bold}
-.card{background:white;margin:20px;padding:20px;border-radius:15px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;overflow:hidden;height:100vh}
+.header{position:fixed;top:0;width:100%;z-index:10;display:flex;justify-content:space-between;padding:15px;background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent)}
+.logo{font-weight:900;font-size:22px}
+.logo span{color:#ffcc00}
+.feed{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory}
+.post{height:100vh;width:100vw;position:relative;scroll-snap-align:start;background:#111;display:flex;align-items:center;justify-content:center}
+.post video{height:100%;width:100%;object-fit:cover}
+.info{position:absolute;bottom:100px;left:12px;right:80px}
+.info h3{font-size:17px}
+.info p{font-size:14px;margin-top:4px}
+.actions{position:absolute;right:10px;bottom:100px;display:flex;flex-direction:column;gap:20px}
+.circle{width:50px;height:50px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid white}
+.bottom{position:fixed;bottom:0;width:100%;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0 22px}
+.add{width:44px;height:30px;background:#ffcc00;border-radius:8px;color:black;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+#uploadModal{display:none;position:fixed;inset:0;background:#000;z-index:20;padding:20px}
+input,textarea{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:none;background:#1a1a1a;color:white}
+button.main{width:100%;padding:14px;background:#ffcc00;color:black;border:none;border-radius:10px;font-weight:900}
 </style>
 </head>
 <body>
 <div class="header">
-<h1>☀️ CYRUSOL</h1>
-<p>Énergie Solaire - Azové, Kouffo, Bénin</p>
-<a class="btn" href="https://wa.me/2290190774756?text=Bonjour%20CYRUSOL,%20je%20veux%20des%20infos%20sur%20vos%20panneaux%20solaires">💬 WhatsApp</a>
+<div class="logo">CYRUS<span>OL</span></div>
+<div>Bohicon, Bénin</div>
 </div>
-<div class="card">
-<h2>Bienvenue chez CYRUSOL</h2>
-<p>Site officiel cyrusol, énergie solaire. Panneaux, batteries, installation complète.</p>
-<p>📍 Azové<br>📞 <a href="https://wa.me/2290190774756">+229 01 90 77 47 56</a><br>Contactez-nous sur WhatsApp</p>
+<div class="feed" id="feed"></div>
+<div class="bottom">
+<div>🏠<br>Accueil</div>
+<div>🔍<br>Découvrir</div>
+<div onclick="openUpload()"><div class="add">+</div></div>
+<div>💬<br>Messages</div>
+<div>👤<br>Moi</div>
 </div>
+<div id="uploadModal">
+<h2>Créer une vidéo CYRUSOL</h2>
+<input type="file" id="videoFile" accept="video/*">
+<input type="text" id="caption" placeholder="Description de ta vidéo...">
+<input type="text" id="username" placeholder="Ton nom (ex: @cyrusol)">
+<button class="main" onclick="publishVideo()">PUBLIER SUR CYRUSOL</button>
+<button onclick="closeUpload()" style="width:100%;padding:12px;background:transparent;color:white;border:1px solid #333;border-radius:10px;margin-top:10px">Annuler</button>
+</div>
+<script>
+const defaultVideos = [
+{src:"https://www.w3schools.com/html/mov_bbb.mp4", user:"@cyrusol", caption:"Bienvenue sur CYRUSOL 🔥 Ma plateforme vidéo créée depuis Bohicon, Bénin ! #cyrusol #benin"},
+];
+let videos = JSON.parse(localStorage.getItem('cyrusol_videos')||'null') || defaultVideos;
+function render(){
+const feed=document.getElementById('feed');feed.innerHTML='';
+videos.forEach(v=>{
+feed.innerHTML+=`<div class="post"><video src="${v.src}" loop playsinline onclick="this.paused?this.play():this.pause()"></video><div class="info"><h3>${v.user}</h3><p>${v.caption}</p><p>🎵 CYRUSOL Original - Bohicon</p></div><div class="actions"><div class="circle">❤️</div><div class="circle">💬</div><div class="circle" onclick="share()">↗️</div></div></div>`;
+});
+}
+function share(){window.open('https://wa.me/2290190774756?text=Découvre ma plateforme CYRUSOL https://cyrusol-bj.github.io/cyrusol-video/');}
+function openUpload(){document.getElementById('uploadModal').style.display='block'}
+function closeUpload(){document.getElementById('uploadModal').style.display='none'}
+function publishVideo(){
+const file=document.getElementById('videoFile').files[0];
+const caption=document.getElementById('caption').value||'Vidéo CYRUSOL #cyrusol';
+const user=document.getElementById('username').value||'@cyrusol';
+if(!file){alert('Choisis une vidéo');return;}
+const url=URL.createObjectURL(file);
+videos.unshift({src:url,user:user,caption:caption});
+localStorage.setItem('cyrusol_videos',JSON.stringify(videos));
+render();closeUpload();
+}
+render();
+</script>
 </body>
 </html>
