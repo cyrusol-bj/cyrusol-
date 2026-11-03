@@ -1,0 +1,16 @@
+{
+  "name": "CYRUSOL - Energie Solaire",
+  "short_name": "CYRUSOL",
+  "start_url": "/cyrusol-/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ffcc00",
+  "description": "Site officiel CYRUSOL energie solaire",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1087/1087815.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
